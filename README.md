@@ -9,7 +9,8 @@
 
 ***
 
-##数据库方面
+## 数据库方面
+
 使用的Mongodb的数据库
 数据存储格式：json
 
@@ -24,7 +25,7 @@ __貌似pymongo并没有创建数据库和collection的功能。只能对现有�
 
 在mongodb中创建一个存放proxyip的数据库，创建两个collection，分别是UnverfiedIP和verfiedIP(名字随你喜欢取其他的也可以，但是代码里面的collection的名字也得记得改)
 
-###创建数据库完毕后
+### 创建数据库完毕后
 先随便插入几条数据，然后通过代码手动创建一个索引
 ```python
 collection.create_index([('ip:port', pymongo.ASCENDING)], unique=True)  # 创建索引
@@ -56,7 +57,7 @@ __两个collection都需要创建索引__
 ### CtrlFunc.py
     此文件内的有个方法
     1、CrawlToUvipDB 将爬取的未经过验证的ip存进数据库
-    2、CheckUvipToVip 从未验证的ip池内多线程验证可用的ip从库内删除并放入有效ip池，更新验证次数，对验证次数超过限制的ip删除
+    2、CheckUvipToVip 从未验证的ip池内多线程验证  可用的ip从库内删除并放入有效ip池，更新验证次数，对验证次数超过限制的ip删除
     3、CheckVipToUvip 验证有效ip池内的ip的可用性，将不可用的ip从库内删除并放入未验证ip池，放入之前重置这些ip的验证次数
 
 ### Crawl.py
