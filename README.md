@@ -1,0 +1,2 @@
+# ProxyipPool
+从几个有免费代理ip的网址爬取免费ip到本地mongodb数据库，定时验证ip可用性
