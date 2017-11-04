@@ -38,7 +38,7 @@ class ProxyIPAPS:
             'max_instances': 1
         }
         self.main_process_sche = BackgroundScheduler(job_defaults=job_defaults)
-        self.checker_sche = BackgroundScheduler(job_defaults=job_defaults)
+        self.checker_process_sche = BackgroundScheduler(job_defaults=job_defaults)
         self.lock = Lock()
 
     def __main_process(self):
@@ -87,7 +87,7 @@ class ProxyIPAPS:
         self.__main_process()
         self.__check_process()
         self.main_process_sche.start()
-        self.check_process().start()
+        self.checker_process_sche.start()
 if __name__ == '__main__':
     a = ProxyIPAPS()
     a.run()
