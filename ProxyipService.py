@@ -5,7 +5,7 @@ import win32service
 import win32serviceutil
 import win32event
 import os, time
-from aps import ProxyIPAPS
+from apschedulerjob import ProxyIPAPS
 import traceback
 
 """
