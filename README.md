@@ -64,11 +64,5 @@ __两个collection都需要创建索引__
     2、CheckUvipToVip 从未验证的ip池内多线程验证  可用的ip从库内删除并放入有效ip池，更新验证次数，对验证次数超过限制的ip删除
     3、CheckVipToUvip 验证有效ip池内的ip的可用性，将不可用的ip从库内删除并放入未验证ip池，放入之前重置这些ip的验证次数
 
-### Crawl.py
-    调用CrawlToUvipDB方法爬取ip存入未验证ip池
-### CheckUvip.py
-    调用CheckUvipToVip方法验证未验证ip池内的ip并将有用的入有效ip池
-### CheckVip.py
-    调用CheckVipToUvip方法验证有效ip池内的ip并将无用的ip入未验证ip池
 
     
