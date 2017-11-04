@@ -64,14 +64,14 @@ class ProxyIPAPS:
         pass
 
     def __check_process(self):
-        @self.checker_sche.scheduled_job('cron', second='*/30') # 强制crawl JOB
+        @self.checker_process_sche.scheduled_job('cron', second='*/30') # 强制crawl JOB
         def force_crwal():
             self.lock.acquire()
             if CtrlFunc.CollectionCount(self.database.UnverifiedIP) < 0:
                 CtrlFunc.CrawlToUvipDB(self.database.UnverifiedIP)
             self.lock.release()
 
-        @self.checker_sche.scheduled_job('cron', second='*/10') # 强制验证UnverfiedIP JOB
+        @self.checker_process_sche.scheduled_job('cron', second='*/10') # 强制验证UnverfiedIP JOB
         def force_checkuvip():
             self.lock.acquire()
             if CtrlFunc.CollectionCount(self.database.verifiedIP) < 10:
