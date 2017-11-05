@@ -1,5 +1,5 @@
 # ProxyipPool
-从几个有免费代理ip的网址爬取免费ip到本地mongodb数据库，定时验证ip可用性。通过将程序写成windows服务的方式，让其在后台定时的维护代理ip池（程序和README正在完善中。。。2017.10.30）
+从几个有免费代理ip的网址爬取免费ip到本地mongodb数据库，定时验证ip可用性。通过将程序写成windows服务的方式，让其在后台定时的维护代理ip池（程序和README正在完善中。。。2017.11.05）
 
 ***
 ## 下载之前
@@ -12,23 +12,23 @@
 ## 运行
 1.
 
-先修改sched_conf.ini文件内的配置参数，将数据库所在的ip和监听的端口，授权的用户名和密码填写进去（将apschedulerjob.py的第16行改为配置文件在你电脑上的**绝对路径**，一定要是绝对路径，不然启动服务时候出报错！）
+先修改sched_conf.ini文件内的配置参数，将数据库所在的ip和监听的端口，授权的用户名和密码填写进去（将apschedulerjob.py的第16行改为配置文件在你电脑上的**绝对路径**，一定要是绝对路径，不然启动服务时候会报错！）
 
 2.
 
 cmd 到你存放代码的根目录下安装服务，输入 
 ```bash
-python apschedulerjob.py install
+python ProxyipService.py install
 ```
 如果想开机自启动服务的话就这么安装，输入
 ```bash
-python apschedulerjob.py --startup auto install 
+python ProxyipService.py --startup auto install 
 ```
 先安装服务，如果有杀毒软件警告就忽略。安装完毕之后就是启动服务了
 ```bash
-python apschedulerjob.py start
+python ProxyipService.py start
 ```
-如果启动服务成功则忽略以下步骤，如果报错则按照3.的方法解决
+如果启动服务成功则忽略以下步骤，如果报错1053则按照3.的方法解决
 
 3.
 
@@ -45,14 +45,14 @@ __（我一开始也是遇到了1053的错误，但是百度许久未果，我�
 4.
 如果想停止服务就输入
 ```bash
-python apschedulerjob.py stop
+python ProxyipService.py stop
 ```
 
 5.
 
 如果想删除服务话，先停止服务，再输入
 ```bash
-python apschedulerjob.py remove
+python ProxyipService.py remove
 ```
 
 ***
@@ -96,6 +96,14 @@ __两个collection都需要创建索引__
 
 ![](https://github.com/coldezera/ProxyipPool/blob/master/image.jpg)
 
+
+    爬取代理ip网页ip10分钟爬取一次
+    UnverfiedIP中的ip没有之后强制crawl重新爬取一次，重置crawl倒计时
+    verfiedIP中的ip数量少于10之后强制验证UnverfiedIP一次，重置验证UnverfiedIP倒计时
+    验证UnverfiedIP45秒一次
+    验证verfiedIP每15秒一次
+
+
 ## 代码介绍
 ### getproxyip.py
     Proxyip类是爬取代理ip网址的免费ip的，类内的私有方法是从每个网站解析出ip地址和协议的。类内唯一一个非私有方法是整合所有私有方法获得的ip并返回出去的方法。
@@ -105,6 +113,7 @@ __两个collection都需要创建索引__
 
 ### mongo/Mongopy.py
     对pymongo的一些方法进行了简单的封装，使得在写代码中能够方便的去使用
+    （里面有设置了一个ip验证的次数如果超过5次都不可用的话，将会被自动删除。如果你想修改次数，请在第112行的数字出修改）
     
 ### CtrlFunc.py
     此文件内的有个方法
@@ -112,5 +121,16 @@ __两个collection都需要创建索引__
     2、CheckUvipToVip 从未验证的ip池内多线程验证  可用的ip从库内删除并放入有效ip池，更新验证次数，对验证次数超过限制的ip删除
     3、CheckVipToUvip 验证有效ip池内的ip的可用性，将不可用的ip从库内删除并放入未验证ip池，放入之前重置这些ip的验证次数
 
+### apschedulerjob.py
+    使用apscheduler这个任务调度框架，预先设置好要执行的任务，还有任务执行的间隔时间。在这里可以修改爬取和验证的任务的时间间隔。
+    我预设的时间间隔，在执行多几次之后，可用ip数据库最少的数量会在10多个左右，未验证的ip数据库最少的数量大概在50个左右，如果觉得这个数量不能满足要求，可以适当修改。
+    但是免费ip毕竟可用率不高，可能修改之后效果也不太理想
+
+### ProxyipService.py
+    将代码的运行写入windows服务的脚本，调用apschedulerjob.py内的任务
+
+## 最后
+* **爬取的ip夹杂着高匿和普通，并没有对其进行分类，以后有时间估计会加上这个功能**
+* **如果程序有什么问题或者BUG，也请告诉我，QQ：616775154 **
 
     
