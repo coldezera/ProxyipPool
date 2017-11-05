@@ -10,10 +10,10 @@ import traceback
 
 """
 爬取代理ip网页ip10分钟爬取一次
-UnverfiedIP中的ip没有之后强制crawl重新爬取一次，重置crawl倒计时
-verfiedIP中的ip数量少于10之后强制验证UnverfiedIP一次，重置验证UnverfiedIP倒计时
-验证UnverfiedIP45秒一次
-验证verfiedIP每15秒一次
+UnverfiedIP中的ip没有之后强制crawl重新爬取一次
+verfiedIP中的ip数量少于10之后强制验证UnverfiedIP一次
+验证UnverfiedIP60秒一次
+验证verfiedIP每20秒一次
 """
 
 
